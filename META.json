@@ -4,7 +4,7 @@
       "Tom Molesworth <cpan@entitymodel.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300038, CPAN::Meta::Converter version 2.132510",
+   "generated_by" : "Dist::Zilla version 5.005, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -39,9 +39,10 @@
       },
       "test" : {
          "requires" : {
+            "File::Spec" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
-            "Test::CheckDeps" : "0.006",
+            "Test::CheckDeps" : "0.010",
             "Test::More" : "0.98"
          }
       }
@@ -54,6 +55,6 @@
       },
       "homepage" : "http://search.cpan.org/dist/Tickit-Widget-Table-Paged/"
    },
-   "version" : "0.001"
+   "version" : "0.002"
 }
 

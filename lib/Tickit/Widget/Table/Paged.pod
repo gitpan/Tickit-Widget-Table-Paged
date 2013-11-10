@@ -14,7 +14,7 @@ Tickit::Widget::Table::Paged - table widget with support for scrolling/paging
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -53,6 +53,64 @@ This widget provides a scrollable table implementation.
 =head2 new
 
 Instantiate. Will attempt to take focus.
+
+=head1 METHODS - Table content
+
+=head2 clear
+
+Clear all data in the table.
+
+=head2 add_row
+
+Add a row to the table. Data should be provided as a list with one item per
+column.
+
+Returns $self.
+
+=head2 add_column
+
+Add a new column. Takes the following named parameters:
+
+=over 4
+
+=item * width - (optional) number of columns
+
+=item * type - (optional) data type, currently only supports 'text' (the default)
+
+=item * align - (optional) align left, center or right
+
+=back
+
+Returns $self.
+
+=head1 METHODS - Callbacks
+
+=head2 on_activate
+
+Accessor for the activation callback - if called without parameters,
+will return the current coderef (if any), otherwise, will set the new
+callback.
+
+This callback will be triggered via L</key_activate>:
+
+ $code->($row_index, $row_data_as_arrayref)
+
+If multiselect is enabled, the callback will have the following:
+
+ $code->(
+   [$highlight_row_index, @selected_row_indices],
+   $highlight_row_data_as_arrayref,
+   @selected_rows_as_arrayrefs
+ )
+
+(the selected row data + index list could be empty here)
+
+=head2 multi_select
+
+Accessor for multi_select mode - when set, this allows multiple rows
+to be selected.
+
+=head1 METHODS - Other
 
 =head2 lines
 
@@ -138,10 +196,6 @@ Returns the index of the currently-highlighted row.
 
 Returns the position of the highlighted row taking scrollbar into account.
 
-=head2 key_previous_row
-
-Go to the previous row.
-
 =head2 scroll_highlight
 
 Update scroll information after changing highlight position.
@@ -149,6 +203,10 @@ Update scroll information after changing highlight position.
 =head2 move_highlight
 
 Change the highlighted row.
+
+=head2 key_previous_row
+
+Go to the previous row.
 
 =head2 key_next_row
 
@@ -194,18 +252,6 @@ Rectangle representing the area covered by the current scrollbar.
 
 Size of the vertical scrollbar.
 
-=head2 clear
-
-Clear all data in the table.
-
-=head2 add_row
-
-Add a row to the table.
-
-=head2 add_column
-
-Add a new column. Takes some parameters.
-
 =head2 key_next_column
 
 Move to the next column.
@@ -226,6 +272,10 @@ Move to the last column.
 
 Activate the highlighted item.
 
+=head2 key_select_toggle
+
+Toggle selected row.
+
 =head1 TODO
 
 Current list of pending features:
@@ -239,8 +289,6 @@ it's reliable enough for release, so this version only has basic arrayref
 support.
 
 =item * Column and cell highlighting modes
-
-=item * Multiselection
 
 =item * Proper widget-in-cell support
 
@@ -266,7 +314,7 @@ widgets. Does not support scrolling and performance isn't as good, so it will ev
 
 =item L<Tickit::Widget>
 
-L<get_style_pen|Tickit::Widget/get_style_pen>, L<get_style_text|Tickit::Widget/get_style_text>, L<get_style_values|Tickit::Widget/get_style_values>, L<key_focus_next_after|Tickit::Widget/key_focus_next_after>, L<key_focus_next_before|Tickit::Widget/key_focus_next_before>, L<on_pen_changed|Tickit::Widget/on_pen_changed>, L<parent|Tickit::Widget/parent>, L<pen|Tickit::Widget/pen>, L<redraw|Tickit::Widget/redraw>, L<resized|Tickit::Widget/resized>, L<set_parent|Tickit::Widget/set_parent>, L<set_pen|Tickit::Widget/set_pen>, L<set_style|Tickit::Widget/set_style>, L<set_style_tag|Tickit::Widget/set_style_tag>, L<set_window|Tickit::Widget/set_window>, L<style_classes|Tickit::Widget/style_classes>, L<take_focus|Tickit::Widget/take_focus>, L<window|Tickit::Widget/window>, L<window_lost|Tickit::Widget/window_lost>
+L<get_style_pen|Tickit::Widget/get_style_pen>, L<get_style_text|Tickit::Widget/get_style_text>, L<get_style_values|Tickit::Widget/get_style_values>, L<key_focus_next_after|Tickit::Widget/key_focus_next_after>, L<key_focus_next_before|Tickit::Widget/key_focus_next_before>, L<on_pen_changed|Tickit::Widget/on_pen_changed>, L<parent|Tickit::Widget/parent>, L<pen|Tickit::Widget/pen>, L<redraw|Tickit::Widget/redraw>, L<requested_cols|Tickit::Widget/requested_cols>, L<requested_lines|Tickit::Widget/requested_lines>, L<requested_size|Tickit::Widget/requested_size>, L<resized|Tickit::Widget/resized>, L<set_parent|Tickit::Widget/set_parent>, L<set_pen|Tickit::Widget/set_pen>, L<set_requested_size|Tickit::Widget/set_requested_size>, L<set_style|Tickit::Widget/set_style>, L<set_style_tag|Tickit::Widget/set_style_tag>, L<set_window|Tickit::Widget/set_window>, L<style_classes|Tickit::Widget/style_classes>, L<take_focus|Tickit::Widget/take_focus>, L<window|Tickit::Widget/window>, L<window_lost|Tickit::Widget/window_lost>
 
 =back
 

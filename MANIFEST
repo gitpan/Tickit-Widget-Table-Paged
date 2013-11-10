@@ -10,6 +10,7 @@ SIGNATURE
 cpanfile
 dist.ini
 examples/multi.pl
+examples/multiselect.pl
 examples/style.pl
 lib/Tickit/Widget/Table/Paged.pm
 lib/Tickit/Widget/Table/Paged.pod
