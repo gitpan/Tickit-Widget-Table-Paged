@@ -14,7 +14,7 @@ Tickit::Widget::Table::Paged - table widget with support for scrolling/paging
 
 =head1 VERSION
 
-version 0.003
+version 0.004
 
 =head1 SYNOPSIS
 
@@ -56,6 +56,14 @@ Instantiate. Will attempt to take focus.
 
 =head1 METHODS - Table content
 
+=head2 data
+
+Returns the table's current data content as an arrayref.
+
+Note that it is not recommended to make any changes to this
+data structure - you are responsible for triggering any
+necessary redrawing or resizing logic if you choose to do so.
+
 =head2 clear
 
 Clear all data in the table.
@@ -82,6 +90,11 @@ Add a new column. Takes the following named parameters:
 =back
 
 Returns $self.
+
+=head2 selected_rows
+
+Returns the selected row, or multiple rows as a list if multi_select is enabled.
+If multi_select is enabled it does not return the row currently highlighted (unless that row is also selected).
 
 =head1 METHODS - Callbacks
 
