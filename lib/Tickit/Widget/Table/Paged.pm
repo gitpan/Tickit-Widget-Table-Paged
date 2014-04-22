@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use parent qw(Tickit::Widget);
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 =head1 NAME
 
@@ -12,7 +12,7 @@ Tickit::Widget::Table::Paged - table widget with support for scrolling/paging
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -592,9 +592,10 @@ sub scroll_highlight {
 	my $up = shift;
 	return $self unless my $win = $self->window;
 
+	return $self unless my $scrollbar_rect = $self->active_scrollbar_rect;
 	my $old = $self->highlight_visible_row;
 	my $redraw_rect = Tickit::RectSet->new;
-	$redraw_rect->add($self->active_scrollbar_rect);
+	$redraw_rect->add($scrollbar_rect);
 	if($up) {
 		--$self->{highlight_row};
 		--$self->{row_offset};
@@ -602,10 +603,15 @@ sub scroll_highlight {
 		++$self->{highlight_row};
 		++$self->{row_offset};
 	}
-	$redraw_rect->add($self->active_scrollbar_rect->translate($up ? -1 : 1, 0));
+
+	my $direction = $up ? -1 : 1;
+	$redraw_rect->add($scrollbar_rect->translate($direction, 0));
 	$redraw_rect->add($_) for $self->expose_rows($old, $self->highlight_visible_row);
-	$win->scrollrect(1, 0, $win->lines, $win->cols, $up ? -1 : 1, 0);
-	$win->expose($_) for map $_->translate($up ? 1 : -1, 0), $redraw_rect->rects;
+
+	# FIXME We're assuming the header is 1 row in height here (and elsewhere),
+	# this seems like an arbitrary restriction.
+	$win->scrollrect(1, 0, $win->lines - 1, $win->cols, $direction, 0);
+	$win->expose($_) for map $_->translate(-$direction, 0), $redraw_rect->rects;
 }
 
 =head2 move_highlight
@@ -756,7 +762,6 @@ sub scroll_rows {
 	my $cur = $self->scroll_position;
 	my $ext = $self->scroll_dimension;
 	my $max = $self->row_count - $ext;
-	return if $max < $ext;
 	return unless $max;
 	my $y = floor(0.5 + ($cur * ($ext - $self->sb_height) / $max));
 	return $y, $y + $self->sb_height;
@@ -885,6 +890,8 @@ support.
 
 =item * Formatters for converting raw cell data into printable format
 (without having to go through a separate widget)
+
+=item * Better header support (more than one row, embedded widgets)
 
 =back
 

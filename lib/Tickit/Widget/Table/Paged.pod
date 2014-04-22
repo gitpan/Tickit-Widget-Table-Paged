@@ -14,7 +14,7 @@ Tickit::Widget::Table::Paged - table widget with support for scrolling/paging
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -294,6 +294,8 @@ support.
 
 =item * Formatters for converting raw cell data into printable format
 (without having to go through a separate widget)
+
+=item * Better header support (more than one row, embedded widgets)
 
 =back
 
